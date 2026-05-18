@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'
 import styles from './upload.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function UploadArtworkPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     artist_name: '',
@@ -51,17 +54,21 @@ export default function UploadArtworkPage() {
     try {
       const response = await fetch('/api/gallery/upload', {
         method: 'POST',
-        body: data 
+        body: data
       });
 
       const result = await response.json();
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Masterpiece uploaded and saved successfully!' });
-        
+
         setFormData({ title: '', artist_name: '', category: 'Abstract', dimension: '', medium: '', artist_note: '' });
         setImageFile(null);
         setFileName('');
+
+        setTimeout(() => {
+          router.push("/gallery")
+        }, 140)
       } else {
         setStatus({ type: 'error', message: result.message || 'Upload failed.' });
       }
@@ -82,16 +89,16 @@ export default function UploadArtworkPage() {
         <h1 className={styles.pageTitle}>Exhibit Your Artwork</h1>
 
         <form onSubmit={handleSubmit} className={styles.uploadForm}>
-          
+
           <div className={styles.inputGroup}>
             <label>Artwork File</label>
             <div className={styles.fileInputWrapper} onClick={() => document.getElementById('artFileInput').click()}>
               <p>{fileName ? `Selected: ${fileName}` : 'Drag & Drop or Click to Upload Image (JPG, PNG)'}</p>
-              <input 
+              <input
                 id="artFileInput"
-                type="file" 
-                accept="image/*" 
-                onChange={handleFileChange} 
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
                 style={{ display: 'none' }}
               />
             </div>
@@ -139,7 +146,7 @@ export default function UploadArtworkPage() {
           )}
 
           <button type="submit" disabled={loading} className={styles.submitBtn}>
-            {loading ? 'Uploading to Cloudinary & DB...' : 'Publish Artwork'}
+            {loading ? 'uploading...' : 'Publish Artwork'}
           </button>
 
         </form>
