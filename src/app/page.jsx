@@ -1,1 +1,57 @@
-pa
+import Link from 'next/link'; 
+import styles from './page.module.css'; 
+import { connectDB } from '@/src/lib/db';
+console.log(connectDB())
+export default function HomePage() {
+  
+  return (
+    <main className={styles.mainContainer}>
+      
+      <section className={styles.heroSection}>
+        
+        <div 
+          className={styles.heroBgImage}
+          style={{ 
+            backgroundImage: `url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1344&auto=format&fit=crop')` 
+          }}
+        />
+
+        <div className={styles.heroGradientOverlay} />
+
+        <div className={styles.heroContent}>
+          
+          <h1 className={styles.heroHeading}>
+            Virtual Art <br className={styles.responsiveBr} /> Gallery
+          </h1>
+
+          <div className={styles.subtextContainer}>
+            <p className={styles.heroSubtext}>
+              Experience curated masterpieces from global digital and classical artists in a fully immersive digital space.
+            </p>
+          </div>
+
+          <div className={styles.ctaContainer}>
+            
+            <Link href="/gallery" passHref className={styles.buttonLink}>
+              <button className={styles.primaryCta}>
+                <span className={styles.primaryCtaText}>
+                  Enter Gallery
+                </span>
+              </button>
+            </Link>
+
+            <Link href="/auth" passHref className={styles.buttonLink}>
+              <button className={styles.secondaryCta}>
+                <span className={styles.secondaryCtaText}>
+                  Join Artist
+                </span>
+              </button>
+            </Link>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+  );
+}
