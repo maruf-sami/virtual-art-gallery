@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if(!MONGODB_URI){
@@ -13,4 +14,32 @@ export async function connectDb(){
     if(cached.conn){
         return cached.conn;
     }
+    if(!cached.promise){
+        const opts = {
+            bufferCommands: false,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            dbName: 'art-work',   
+            tlsAllowInvalidCertificates: true     
+        };
+        console.log("Mongo db connecting...")
+
+        cached.promise = mongoose.connect(MONGODB_URI,opts).then((mongooseInstance)=>{
+            console.log("Mongodb connected Successfully");
+            return mongooseInstance
+        }).catch((error)=>{
+            console.error("Mongodb connection error ", error)
+            cached.promise = null;
+            throw error;
+        })
+    }
+    
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+  return cached.conn;
+
 }
