@@ -1,92 +1,109 @@
 "use client";
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import styles from './artists.module.css';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import styles from './artist-profile.module.css';
 
-export default function ArtistsPage() {
-  const [artworks, setArtworks] = useState([]);
+export default function ArtistProfilePage({ params }) {
+  const router = useRouter();
+  const unwrappedParams = React.use(params);
+
+  const artistNameFromUrl = decodeURIComponent(unwrappedParams.name);
+
+  const [artistWorks, setArtistWorks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchGalleryData() {
+    async function fetchArtistCollection() {
       try {
         const response = await fetch('/api/gallery');
         if (response.ok) {
-          const data = await response.json();
-          setArtworks(data);
+          const allData = await response.json();
+
+          const filteredData = allData.filter(
+            art => art.artist_name?.trim().toLowerCase() === artistNameFromUrl.toLowerCase()
+          );
+          setArtistWorks(filteredData);
         }
       } catch (error) {
-        console.error("Error fetching data for artists list:", error);
+        console.error("Error fetching artist collection from DB:", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchGalleryData();
-  }, []);
-
-  const uniqueArtists = useMemo(() => {
-    const seenNames = new Set();
-    const list = [];
-    
-    artworks.forEach(art => {
-      const name = art.artist_name ? art.artist_name.trim() : "Unknown Artist";
-      if (!seenNames.has(name.toLowerCase())) {
-        seenNames.add(name.toLowerCase());
-        list.push({
-          artist_name: name,
-          category: art.category || "General"
-        });
-      }
-    });
-    return list;
-  }, [artworks]);
+    fetchArtistCollection();
+  }, [artistNameFromUrl]);
 
   if (loading) {
     return (
-      <div className={styles.artistsContainer}>
-        <p className={styles.statusText}>Connecting to studio & indexing creators...</p>
+      <div className={styles.profileContainer}>
+        <p className={styles.statusText}>Assembling artist exhibition room...</p>
       </div>
     );
   }
 
+  if (artistWorks.length === 0) {
+    return (
+      <div className={styles.profileContainer}>
+        <div className={styles.maxWrapper} style={{ textAlign: 'center' }}>
+          <h2 className={styles.profileName}>Artist Profile Empty</h2>
+          <p className={styles.statusText}>No catalogued works found for "{artistNameFromUrl}".</p>
+          <button onClick={() => router.push('/artists')} className={styles.backBtn}>
+            Return to Artists Registry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentArtistName = artistWorks[0].artist_name || artistNameFromUrl;
+  const currentArtistCategory = artistWorks[0].category || "Fine Art";
+
   return (
-    <div className={styles.artistsContainer}>
+    <div className={styles.profileContainer}>
       <div className={styles.maxWrapper}>
         
-        <div className={styles.titleArea}>
-          <h1 className={styles.title}>Our Resident Artists</h1>
-          <div className={styles.divider}></div>
+        <button onClick={() => router.push('/artists')} className={styles.arrowBack} title="All Artists">
+          <span>← Back to Artists</span>
+        </button>
+
+        <header className={styles.profileHeader}>
+          <div className={styles.profileAvatarLarge}>
+            {currentArtistName.charAt(0).toUpperCase()}
+          </div>
+          <div className={styles.headerInfo}>
+            <h1 className={styles.profileName}>{currentArtistName}</h1>
+            <p className={styles.profileSpec}>{currentArtistCategory} Specialist</p>
+            <span className={styles.totalBadge}>{artistWorks.length} Exhibition Pieces</span>
+          </div>
+        </header>
+
+        <div className={styles.showcaseDivider}>
+          <span className={styles.dividerTitle}>Collection Showcase</span>
         </div>
 
-        <div className={styles.artistsGrid}>
-          {uniqueArtists.map((artist) => {
-            const totalArts = artworks.filter(art => art.artist_name?.trim().toLowerCase() === artist.artist_name.toLowerCase()).length;
-            const initialLetter = artist.artist_name.charAt(0).toUpperCase();
-
-            return (
-              <Link 
-                key={artist.artist_name}
-                href={`/artists/${encodeURIComponent(artist.artist_name)}`}
-                className={styles.artistCard}
-              >
-                <div className={styles.avatarCircle}>
-                  {initialLetter}
-                </div>
-
-                <h2 className={styles.artistName}>
-                  {artist.artist_name}
-                </h2>
-                <p className={styles.specialityText}>
-                  {artist.category} Specialist
-                </p>
-                
-                <div className={styles.counterBox}>
-                  Total Artworks: <span className={styles.counterNumber}>{totalArts}</span>
-                </div>
-              </Link>
-            );
-          })}
+        <div className={styles.portfolioGrid}>
+          {artistWorks.map((art) => (
+            <Link 
+              key={art._id} 
+              href={`/gallery/${art._id}`}
+              className={styles.portfolioCard}
+            >
+              <div className={styles.imageHolder}>
+                <img 
+                  src={art.image} 
+                  alt={art.title} 
+                  className={styles.artImg}
+                />
+              </div>
+              <div className={styles.artDetails}>
+                <span className={styles.artCat}>{art.category}</span>
+                <h3 className={styles.artTitle}>{art.title}</h3>
+              </div>
+            </Link>
+          ))}
         </div>
 
       </div>
