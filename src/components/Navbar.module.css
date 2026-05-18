@@ -1,57 +1,115 @@
-import Link from 'next/link'; 
-import styles from './page.module.css'; 
-import { connectDB } from '@/src/lib/db';
-console.log(connectDB())
-export default function HomePage() {
-  
-  return (
-    <main className={styles.mainContainer}>
-      
-      <section className={styles.heroSection}>
-        
-        <div 
-          className={styles.heroBgImage}
-          style={{ 
-            backgroundImage: `url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1344&auto=format&fit=crop')` 
-          }}
-        />
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem;
+  height: 70px;
+  background-color: rgba(12, 10, 9, 0.9);
+  backdrop-filter: blur(24px);
+ border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-        <div className={styles.heroGradientOverlay} />
+.logo {
+  font-family: 'Liberation Serif', serif;
+  text-transform: capitalize;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -1.2px;
+  text-decoration: none;
+  color: #FBBF24;
+}
 
-        <div className={styles.heroContent}>
-          
-          <h1 className={styles.heroHeading}>
-            Virtual Art <br className={styles.responsiveBr} /> Gallery
-          </h1>
+.navLinks {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 2.5rem;
+}
 
-          <div className={styles.subtextContainer}>
-            <p className={styles.heroSubtext}>
-              Experience curated masterpieces from global digital and classical artists in a fully immersive digital space.
-            </p>
-          </div>
+.navLink {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  text-decoration: none;
+  color: #A8A29E;
+  transition: color 0.2s ease;
+}
 
-          <div className={styles.ctaContainer}>
-            
-            <Link href="/gallery" passHref className={styles.buttonLink}>
-              <button className={styles.primaryCta}>
-                <span className={styles.primaryCtaText}>
-                  Enter Gallery
-                </span>
-              </button>
-            </Link>
+.navLink:hover {
+  color: #E5E2E1;
+}
 
-            <Link href="/auth" passHref className={styles.buttonLink}>
-              <button className={styles.secondaryCta}>
-                <span className={styles.secondaryCtaText}>
-                  Join Artist
-                </span>
-              </button>
-            </Link>
+.navButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #E9C349, #997A00);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
 
-          </div>
-        </div>
-      </section>
+.navButton:active {
+  transform: scale(0.95);
+}
 
-    </main>
-  );
+.navButtonText {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #3C2F00;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.profileAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #E9C349;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #3C2F00;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.profileName {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #E5E2E1;
+  display: none; 
+}
+@media (min-width: 768px) {
+  .navbar {
+    position: absolute;
+    padding: 1.5rem 3rem;
+  }
+  .navLinks {
+    display: flex;
+  }
+  .profileName {
+    display: inline;
+  }
 }
