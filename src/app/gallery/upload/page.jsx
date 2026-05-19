@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import styles from './upload.module.css';
-import { useRouter } from 'next/navigation';
+
 
 export default function UploadArtworkPage() {
   const router = useRouter();
