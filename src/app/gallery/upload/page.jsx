@@ -1,24 +1,67 @@
+
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './upload.module.css';
-
 
 export default function UploadArtworkPage() {
   const router = useRouter();
+
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
   const [formData, setFormData] = useState({
     title: '',
-    artist_name: '',
     category: 'Abstract',
-    dimension: '',
-    medium: '',
+    height: '',
+    width: '',
+    medium: 'Oil on Canvas',
     artist_note: ''
   });
+
   const [imageFile, setImageFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
+
+  const predefinedMediums = [
+    "Oil on Canvas",
+    "Acrylic on Canvas",
+    "Watercolor",
+    "Charcoal / Pencil Sketch",
+    "Digital 2D Illustration",
+    "Blender / 3D Render",
+    "Sculpture / Clay",
+    "Mixed Media"
+  ];
+
+  useEffect(() => {
+    async function checkArtistAuth() {
+      try {
+        const res = await fetch('/api/auth');
+
+        if (!res.ok) {
+          alert("Access Denied: Please log in first.");
+          router.push('/auth');
+          return;
+        }
+
+        const userData = await res.json();
+
+        if (userData.role !== 'artist') {
+          alert(Restricted Access: Your role is "${userData.role}". Only registered artists can exhibit artworks.);
+          router.push('/gallery');
+          return;
+        }
+
+        setCheckingAuth(false);
+      } catch (error) {
+        console.error("Auth protection error:", error);
+        router.push('/gallery');
+      }
+    }
+    checkArtistAuth();
+  }, [router]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,11 +85,12 @@ export default function UploadArtworkPage() {
     setLoading(true);
     setStatus({ type: '', message: '' });
 
+    const combinedDimension = ${formData.height.trim()}x${formData.width.trim()};
+
     const data = new FormData();
     data.append('title', formData.title);
-    data.append('artist_name', formData.artist_name);
     data.append('category', formData.category);
-    data.append('dimension', formData.dimension);
+    data.append('dimension', combinedDimension);
     data.append('medium', formData.medium);
     data.append('artist_note', formData.artist_note);
     data.append('image', imageFile);
@@ -62,13 +106,14 @@ export default function UploadArtworkPage() {
       if (response.ok) {
         setStatus({ type: 'success', message: 'Masterpiece uploaded and saved successfully!' });
 
-        setFormData({ title: '', artist_name: '', category: 'Abstract', dimension: '', medium: '', artist_note: '' });
+        // রিসেট করার সময় ডিফল্ট মিডিয়াম 'Oil on Canvas' রাখা হয়েছে
+        setFormData({ title: '', category: 'Abstract', height: '', width: '', medium: 'Oil on Canvas', artist_note: '' });
         setImageFile(null);
         setFileName('');
 
         setTimeout(() => {
-          router.push("/gallery")
-        }, 140)
+          router.push("/gallery");
+        }, 1200);
       } else {
         setStatus({ type: 'error', message: result.message || 'Upload failed.' });
       }
@@ -80,20 +125,30 @@ export default function UploadArtworkPage() {
     }
   };
 
-  const tempUser = { isLoggedIn: false, name: 'Guest' };
+  if (checkingAuth) {
+    return (
+      <div className={styles.uploadContainer}>
+        <div className={styles.formWrapper}>
+          <p style={{ textAlign: 'center', color: '#888', padding: '40px 0', fontSize: '1.1rem' }}>
+            Verifying Artist Credentials...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.uploadContainer}>
-
       <div className={styles.formWrapper}>
         <h1 className={styles.pageTitle}>Exhibit Your Artwork</h1>
 
         <form onSubmit={handleSubmit} className={styles.uploadForm}>
 
+          {/* Artwork File */}
           <div className={styles.inputGroup}>
             <label>Artwork File</label>
             <div className={styles.fileInputWrapper} onClick={() => document.getElementById('artFileInput').click()}>
-              <p>{fileName ? `Selected: ${fileName}` : 'Drag & Drop or Click to Upload Image (JPG, PNG)'}</p>
+              <p>{fileName ? Selected: ${fileName} : 'Drag & Drop or Click to Upload Image (JPG, PNG)'}</p>
               <input
                 id="artFileInput"
                 type="file"
@@ -104,16 +159,13 @@ export default function UploadArtworkPage() {
             </div>
           </div>
 
+          {/* Artwork Title */}
           <div className={styles.inputGroup}>
             <label>Artwork Title</label>
             <input type="text" name="title" value={formData.title} onChange={handleInputChange} required className={styles.inputField} placeholder="e.g., The Golden Cipher" />
           </div>
 
-          <div className={styles.inputGroup}>
-            <label>Artist Name</label>
-            <input type="text" name="artist_name" value={formData.artist_name} onChange={handleInputChange} required className={styles.inputField} placeholder="e.g., Alex Vanguard" />
-          </div>
-
+          {/* Category */}
           <div className={styles.inputGroup}>
             <label>Category</label>
             <select name="category" value={formData.category} onChange={handleInputChange} className={styles.selectField}>
@@ -124,14 +176,50 @@ export default function UploadArtworkPage() {
             </select>
           </div>
 
+          {/* Dimensions */}
           <div className={styles.inputGroup}>
-            <label>Dimensions</label>
-            <input type="text" name="dimension" value={formData.dimension} onChange={handleInputChange} required className={styles.inputField} />
+            <label>Dimensions (Height × Width)</label>
+            <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+              <input
+                type="number"
+                name="height"
+                value={formData.height}
+                onChange={handleInputChange}
+                required
+                className={styles.inputField}
+                placeholder="Height (e.g. 12)"
+                min="0"
+                step="any"
+              />
+              <span style={{ color: '#888', fontWeight: 'bold' }}>×</span>
+              <input
+                type="number"
+                name="width"
+                value={formData.width}
+                onChange={handleInputChange}
+                required
+                className={styles.inputField}
+                placeholder="Width (e.g. 30)"
+                min="0"
+                step="any"
+              />
+            </div>
           </div>
 
           <div className={styles.inputGroup}>
             <label>Medium / Tools Used</label>
-            <input type="text" name="medium" value={formData.medium} onChange={handleInputChange} required className={styles.inputField} placeholder="e.g., Oil on Canvas, Photoshop, Blender" />
+            <select
+              name="medium"
+              value={formData.medium}
+              onChange={handleInputChange}
+              className={styles.selectField}
+            >
+              {predefinedMediums.map((med) => (
+                <option key={med} value={med}>
+                  {med}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className={styles.inputGroup}>
@@ -146,7 +234,7 @@ export default function UploadArtworkPage() {
           )}
 
           <button type="submit" disabled={loading} className={styles.submitBtn}>
-            {loading ? 'uploading...' : 'Publish Artwork'}
+            {loading ? 'Publishing Masterpiece...' : 'Publish Artwork'}
           </button>
 
         </form>
@@ -154,3 +242,4 @@ export default function UploadArtworkPage() {
     </div>
   );
 }
+
