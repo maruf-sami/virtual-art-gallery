@@ -1,0 +1,388 @@
+.outerLayout {
+  display: flex;
+  background-color: #131313;
+  min-height: 100vh;
+  position: relative;
+}
+
+
+.leftAside {
+  width: 240px;
+  background-color: #1c1b1b;
+  border-right: 1px solid rgba(233, 195, 73, 0.1);
+  padding: 6rem 1.5rem 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.asideTitle {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #E9C349;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(233, 195, 73, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.artistCheckboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.customCheckbox {
+  accent-color: #E9C349;
+  width: 14px;
+  height: 14px;
+}
+
+.checkboxText {
+  color: #E5E2E1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+}
+
+.clearFilterBtn {
+  background: transparent;
+  border: 1px solid rgba(233, 195, 73, 0.3);
+  color: #E5E2E1;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clearFilterBtn:hover {
+  border-color: #E9C349;
+  color: #E9C349;
+}
+
+
+.galleryContainer {
+  flex-grow: 1;
+  max-width: 100%;
+  min-height: 100vh;
+  background-color: #131313;
+  color: #E5E2E1;
+  padding: 5rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1184px;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+
+.searchSortRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.searchContainer {
+  flex: 1;
+  min-width: 280px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background-color: #1C1B1B;
+  border: 1px solid rgba(233, 195, 73, 0.3);
+  border-radius: 2px;
+  color: #E5E2E1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.searchInput:focus {
+  border-color: #E9C349;
+}
+
+.compactControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+
+.miniSelect,
+.sortSelect {
+  padding: 0.75rem 2rem 0.75rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  color: #E5E2E1;
+  background-color: #1C1B1B;
+  border: 1px solid rgba(233, 195, 73, 0.3);
+  border-radius: 2px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23E9C349' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  transition: all 0.3s;
+}
+
+.miniSelect:hover,
+.sortSelect:hover {
+  border-color: #E9C349;
+  color: #E9C349;
+}
+
+.miniSelect option {
+  background-color: #1C1B1B;
+  color: #E5E2E1;
+}
+
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #E5E2E1;
+  margin: 0;
+  letter-spacing: -2px;
+  line-height: 1.1;
+}
+
+.divider {
+  width: 64px;
+  height: 2px;
+  background-color: #E9C349;
+}
+
+.grid {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  background-color: #1C1B1B;
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  border-color: rgba(233, 195, 73, 0.2);
+}
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #0E0E0E;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease-in-out;
+}
+
+.card:hover .image {
+  transform: scale(1.02);
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1.5rem;
+}
+
+.category {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: #B8C8DA;
+  text-transform: uppercase;
+  letter-spacing: 0.065rem;
+  font-weight: 500;
+}
+
+.artTitle {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #E5E2E1;
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease-in-out;
+}
+
+.card:hover .artTitle {
+  color: #E9C349;
+}
+
+.artistButton {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(229, 226, 225, 0.8);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  font-weight: 400;
+}
+
+.artistButton:hover {
+  color: #E9C349;
+  text-decoration-color: #E9C349;
+}
+
+
+@media (max-width: 1024px) {
+  .outerLayout {
+    flex-direction: column;
+  }
+
+  .leftAside {
+    width: 100%;
+    padding: 2rem 1.5rem 1rem 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(233, 195, 73, 0.1);
+  }
+
+  .galleryContainer {
+    padding: 2rem 1.5rem;
+  }
+}
+
+
+.loveButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(28, 27, 27, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(233, 195, 73, 0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+
+.heartIcon {
+  width: 16px;
+  height: 16px;
+  fill: transparent;
+  
+  stroke: #E5E2E1;
+  
+  stroke-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.loveCountNumber {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: #E5E2E1;
+  font-weight: 500;
+}
+
+
+.loveButton:hover {
+  background: rgba(28, 27, 27, 0.8);
+  border-color: #E9C349;
+}
+
+.loveButton:hover .heartIcon {
+  stroke: #ff4d6d;
+  
+}
+
+
+.loveButton.loved {
+  background: rgba(255, 77, 109, 0.15);
+  border-color: #ff4d6d;
+}
+
+.loveButton.loved .heartIcon {
+  fill: #ff4d6d;
+  
+  stroke: #ff4d6d;
+  transform: scale(1.1);
+}
+
+.loveButton.loved .loveCountNumber {
+  color: #ff4d6d;
+  font-weight: 600;
+}
