@@ -1,23 +1,31 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/**', 
+        pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: '"images.unsplash.com"',
+        hostname: 'images.unsplash.com',
         port: '',
-        pathname: '/**', 
+        pathname: '/**',
       },
-
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/gallery',
+        permanent: true,
+      },
+    ];
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
