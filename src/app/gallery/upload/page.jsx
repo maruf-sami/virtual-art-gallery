@@ -49,7 +49,7 @@ export default function UploadArtworkPage() {
         const userData = await res.json();
 
         if (userData.role !== 'artist') {
-          alert(Restricted Access: Your role is "${userData.role}". Only registered artists can exhibit artworks.);
+          alert(`Restricted Access: Your role is "${userData.role}". Only registered artists can exhibit artworks.`);
           router.push('/gallery');
           return;
         }
@@ -85,7 +85,7 @@ export default function UploadArtworkPage() {
     setLoading(true);
     setStatus({ type: '', message: '' });
 
-    const combinedDimension = ${formData.height.trim()}x${formData.width.trim()};
+    const combinedDimension = `${formData.height.trim()}x${formData.width.trim()}`;
 
     const data = new FormData();
     data.append('title', formData.title);
@@ -106,7 +106,6 @@ export default function UploadArtworkPage() {
       if (response.ok) {
         setStatus({ type: 'success', message: 'Masterpiece uploaded and saved successfully!' });
 
-        // রিসেট করার সময় ডিফল্ট মিডিয়াম 'Oil on Canvas' রাখা হয়েছে
         setFormData({ title: '', category: 'Abstract', height: '', width: '', medium: 'Oil on Canvas', artist_note: '' });
         setImageFile(null);
         setFileName('');
@@ -148,7 +147,7 @@ export default function UploadArtworkPage() {
           <div className={styles.inputGroup}>
             <label>Artwork File</label>
             <div className={styles.fileInputWrapper} onClick={() => document.getElementById('artFileInput').click()}>
-              <p>{fileName ? Selected: ${fileName} : 'Drag & Drop or Click to Upload Image (JPG, PNG)'}</p>
+              <p>{fileName ? `Selected: ${fileName}` : 'Drag & Drop or Click to Upload Image (JPG, PNG)'}</p>
               <input
                 id="artFileInput"
                 type="file"
