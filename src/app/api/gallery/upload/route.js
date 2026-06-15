@@ -1,6 +1,9 @@
 import { connectDB } from '@/src/lib/db';
 import Artwork from '@/src/models/artWork';
+import User from '@/src/models/User';
 import { v2 as cloudinary } from 'cloudinary';
+import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 cloudinary.config({
@@ -11,19 +14,32 @@ cloudinary.config({
 
 export async function POST(request) {
   try {
+    const cookieStore = await cookies();
+    const tokenCookie = cookieStore.get('token');
+    if (!tokenCookie) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const payload = jwt.verify(tokenCookie.value, process.env.JWT_SECRET);
+    if (!payload?.id || payload.role !== 'artist') {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     await connectDB();
+    const user = await User.findById(payload.id).select('name role');
+    if (!user || user.role !== 'artist') {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
 
     const formData = await request.formData();
-    
     const title = formData.get('title');
-    const artist_name = formData.get('artist_name');
     const category = formData.get('category');
     const dimension = formData.get('dimension');
     const medium = formData.get('medium');
     const artist_note = formData.get('artist_note');
     const file = formData.get('image');
 
-    if (!file || !title || !artist_name) {
+    if (!file || !title || !category || !dimension || !medium) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
@@ -44,8 +60,8 @@ export async function POST(request) {
 
     const newArtwork = new Artwork({
       title,
-      artist_name,
-      artistId: 'temp_artist_id_123',
+      artist_name: user.name,
+      artistId: payload.id,
       category,
       image: imageUrl,
       dimension,
@@ -54,6 +70,9 @@ export async function POST(request) {
     });
 
     await newArtwork.save();
+    await User.findByIdAndUpdate(payload.id, {
+      $addToSet: { uploadedArtworks: String(newArtwork._id) },
+    });
 
     return NextResponse.json({ message: 'Artwork uploaded successfully!', artwork: newArtwork }, { status: 201 });
 
