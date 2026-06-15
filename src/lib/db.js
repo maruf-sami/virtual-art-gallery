@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import mongoose from 'mongoose'
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -40,4 +41,8 @@ export async function connectDB(){
   }
   return cached.conn;
 
+=======
+export function connectDB() {
+  return "DB connected (mock)";
+>>>>>>> 83adb8f (updated gallery page)
 }
