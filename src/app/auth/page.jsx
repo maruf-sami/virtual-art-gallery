@@ -318,7 +318,7 @@ export default function AuthPage() {
                                 ? 'Processing...'
                                 : isLogin
                                     ? 'Access Gallery'
-                                    : Register as ${role}}
+                                    : `Register as ${role}`}
                         </button>
                     </form>
                 </div>
