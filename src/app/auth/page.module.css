@@ -1,0 +1,226 @@
+.authContainer {
+    width: 100%;
+    min-height: 1030px;
+    
+    background-color: #131313;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+
+.canvasWrapper {
+    width: 1280px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.authBox {
+    width: 100%;
+    max-width: 480px;
+    background-color: #1C1B1B;
+    border: 1px solid rgba(233, 195, 73, 0.1);
+    padding: 3.5rem 3rem;
+    border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+.header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.logoTitle {
+    font-family: 'Noto Serif', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: #E5E2E1;
+    letter-spacing: 0.15rem;
+    margin: 0;
+}
+
+.subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+}
+
+
+.toggleContainer {
+    display: flex;
+    background-color: #0E0E0E;
+    padding: 0.35rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggleBtn {
+    flex: 1;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    color: #666;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.activeToggle {
+    background-color: #1C1B1B;
+    color: #E9C349;
+    border-radius: 2px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.roleToggleContainer {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.roleBtn {
+    flex: 1;
+    padding: 0.6rem;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #A0A0A0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.02rem;
+}
+
+.roleBtn:hover {
+    border-color: rgba(233, 195, 73, 0.4);
+    color: #E9C349;
+}
+
+.activeRole {
+    border-color: #E9C349;
+    background-color: rgba(233, 195, 73, 0.05);
+    color: #E9C349;
+    font-weight: 600;
+}
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #E5E2E1;
+    background-color: #0E0E0E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #E9C349;
+    background-color: #121212;
+}
+
+
+.submitSubmitBtn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #E9C349;
+    color: #131313;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.submitSubmitBtn:hover:not(:disabled) {
+    background-color: #dcb43d;
+    box-shadow: 0 4px 15px rgba(233, 195, 73, 0.2);
+}
+
+.submitSubmitBtn:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+}
+
+
+.messageBox {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.errorMsg {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.successMsg {
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+
+@media (max-width: 1280px) {
+    .canvasWrapper {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .authBox {
+        padding: 2rem 1.5rem;
+    }
+}
